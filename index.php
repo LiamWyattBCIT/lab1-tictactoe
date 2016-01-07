@@ -27,9 +27,23 @@ if (isset($_GET['board'])) {
 
 
 function winner ($token, $position) {
-    $won = false;
+    $result = false;
     
-    if (($position[0] == $token) &&
+    for ($row=0; $row<3; $row++) {
+            if (($position[3*$row] == $token) && ($position[3*$row+1] == $token)
+                        && ($position[3*$row+2] == $token)) {
+                $result = true;
+                        }
+    }
+    for ($col=0; $col<3; $col++) {
+            if (($position[$col] == $token) && ($position[$col+3] == $token)
+                        && ($position[$col+6] == $token)){
+                $result = true;
+                        }
+    }
+    
+    
+    /*if (($position[0] == $token) &&
         ($position[1] == $token) &&
         ($position[2] == $token)) {
     $won = true;
@@ -53,15 +67,15 @@ function winner ($token, $position) {
     }else if (($position[2] == $token) &&
         ($position[5] == $token) &&
         ($position[8] == $token)) {
-    $won = true;
-    }else if (($position[0] == $token) &&
+    $won = true;*/
+    if (($position[0] == $token) &&
         ($position[4] == $token) &&
         ($position[8] == $token)) {
-    $won = true;
+    $result = true;
     }else if (($position[6] == $token) &&
         ($position[4] == $token) &&
         ($position[6] == $token)) {
-    $won = true;
+    $result = true;
     }
-    return $won;
+    return $result;
 }
