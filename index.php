@@ -48,10 +48,14 @@ class Game {
         if ($token <> '-') return $token;
         //hard case
         $this->newposition = $this->position; //copy of original
-        $this->newposition[$token] = 'o'; //their move
+        $this->newposition[$cell] = 'o'; //their move
         $move = implode($this->newposition); //make string from array
-        $link = '/?board='.$move;
+        $link = '/lab1-tictactoe/?board='.$move;
         return '<a href="'.$link.'">-</a>';
+    }
+    
+    function pick_move() {
+        
     }
     
     function winner ($token) {
