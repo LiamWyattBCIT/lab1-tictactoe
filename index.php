@@ -6,19 +6,32 @@
  * and open the template in the editor.
  */
 
-$test = new Game('---------');
-$test->display();
-
-
-if (isset($_GET['board'])) {
-    
+//if no board is set, assume a new game is beginning (blank board)
+if (!isset($_GET['board'])) {
+    $position = '---------';
+} else {
     $position = $_GET['board'];
-    $game = new Game($position);
-    
-    if ($game->winner('x')) echo 'You win. Lucky guesses!';
-    else if ($game->winner('o')) echo 'I win. Muahahah';
-    else echo 'No winner yet, but you are losing.';
 }
+    $game = new Game($position);
+    $game->display();
+    if ($game->winner('x')) {
+        echo 'I win. Muahahah';
+        echo '</br></br>';
+        echo '<a href="/lab1-tictactoe/?board=---------">New Game</a>';
+    }
+    else if ($game->winner('o')) {
+        echo 'You win. Lucky guesses!';
+        echo '</br></br>';
+        echo '<a href="/lab1-tictactoe/?board=---------">New Game</a>';
+    }
+    else {
+        echo 'No winner yet, but you are losing.';
+        if (!isset($_GET['move'])) {
+            $game->pick_move();
+            }
+        }
+
+    
 
 class Game {
     var $position;
@@ -26,6 +39,7 @@ class Game {
     function __construct($squares) {
         $this->position = str_split($squares);
     }
+    
     function display() {
         echo "Welcome to the ultimate TicTacToe Experience. </br></br>";
         
@@ -52,10 +66,20 @@ class Game {
         $move = implode($this->newposition); //make string from array
         $link = '/lab1-tictactoe/?board='.$move;
         return '<a href="'.$link.'">-</a>';
+
     }
     
     function pick_move() {
-        
+        for ($pos=0; $pos < 9; $pos++) {
+            $token = $this->position[$pos];
+            if ($token == '-') {
+                $this->newposition = $this->position;
+                $this->newposition[$pos] = 'x';
+                $aimove = implode($this->newposition);
+                $link = '/lab1-tictactoe/?move=true&board='.$aimove;
+                header('Location: '.$link);
+            }
+        }
     }
     
     function winner ($token) {
@@ -72,7 +96,7 @@ class Game {
         ($this->position[4] == $token) &&
         ($this->position[8] == $token)) {
     $result = true;
-    }else if (($this->position[6] == $token) &&
+    }else if (($this->position[2] == $token) &&
         ($this->position[4] == $token) &&
         ($this->position[6] == $token)) {
     $result = true;
